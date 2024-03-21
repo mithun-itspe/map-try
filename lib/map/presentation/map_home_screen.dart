@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
@@ -18,14 +19,14 @@ class MapHomeScreen extends StatelessWidget {
         mapController: watch.mapController,
         options: MapOptions(
           maxZoom: 18.39,
-          minZoom: 5,
+          minZoom: 3,
           initialCenter: watch.currentLocation != null
               ? LatLng(
                   watch.currentLocation!.latitude,
                   watch.currentLocation!.longitude,
                 )
               : watch.latLongIndCenter,
-          initialZoom: 2,
+          initialZoom: 5,
         ),
         children: [
           tileLayer(),
@@ -34,11 +35,30 @@ class MapHomeScreen extends StatelessWidget {
             PolylineLayer(
               polylines: [
                 Polyline(
-                  color: Colors.red,
+                  color: Colors.blue,
+                  strokeWidth: 4,
                   points: watch.coordinators ?? [],
                 ),
               ],
             ),
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Align(
+              alignment: Alignment.bottomRight,
+              child: FloatingActionButton(
+                onPressed: () {
+                  watch.mapController.move(
+                    LatLng(
+                      watch.currentLocation!.latitude,
+                      watch.currentLocation!.longitude,
+                    ),
+                    12,
+                  );
+                },
+                child: const Icon(Icons.location_searching),
+              ),
+            ),
+          ),
         ],
       ),
     );
