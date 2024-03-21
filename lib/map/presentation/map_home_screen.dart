@@ -1,10 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 import 'package:untitled8/map/controller/map_controller.dart';
 import 'package:untitled8/map/presentation/widget/marker_layer_widget.dart';
+import 'package:untitled8/map/presentation/widget/polyline_layer_widget.dart';
 import 'package:untitled8/map/presentation/widget/tile_layer.dart';
 
 class MapHomeScreen extends StatelessWidget {
@@ -31,34 +31,27 @@ class MapHomeScreen extends StatelessWidget {
         children: [
           tileLayer(),
           if (watch.compassHeading != null) MarkerLayerWidget(watch: watch),
-          if (watch.currentLocation != null)
-            PolylineLayer(
-              polylines: [
-                Polyline(
-                  color: Colors.blue,
-                  strokeWidth: 4,
-                  points: watch.coordinators ?? [],
+          if (watch.currentLocation != null) PolylineLayerWidget(watch: watch),
+          ...[
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Align(
+                alignment: Alignment.bottomRight,
+                child: FloatingActionButton(
+                  onPressed: () {
+                    watch.mapController.move(
+                      LatLng(
+                        watch.currentLocation!.latitude,
+                        watch.currentLocation!.longitude,
+                      ),
+                      12,
+                    );
+                  },
+                  child: const Icon(Icons.location_searching),
                 ),
-              ],
-            ),
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Align(
-              alignment: Alignment.bottomRight,
-              child: FloatingActionButton(
-                onPressed: () {
-                  watch.mapController.move(
-                    LatLng(
-                      watch.currentLocation!.latitude,
-                      watch.currentLocation!.longitude,
-                    ),
-                    12,
-                  );
-                },
-                child: const Icon(Icons.location_searching),
               ),
             ),
-          ),
+          ],
         ],
       ),
     );
